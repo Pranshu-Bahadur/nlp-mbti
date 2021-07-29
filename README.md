@@ -3,7 +3,7 @@
 
 ## Dependencies:
 ```shell
-pip install torch pandas
+pip install torch pandas transformers tokenizers datasets numpy
 ```
 ---
 
@@ -13,5 +13,23 @@ pip install torch pandas
 - [ ] (currently working on...) agent.py : NLPAgent(kwargs) | Just build constructor & tokenizer based on user kwargs
 
 ### Preprocessing strategy:
+---
 - [x] 50 posts per user, split by "|||" delimiter.
 - [ ] BertweetTokenizer : normalization=True, fast=False (Which will normalize tweets (add URL tokens) and use then bpe) | Padding according to max words after split.
+
+
+
+### Agent Description:
+---
+
+- [ ] 
+- [ ] I'll need amd driver installed & ROCM(?)4.2, to run tests on local
+
+
+
+
+
+
+
+
+

@@ -2,9 +2,10 @@ import unittest
 from utils import parser, nlp_tc_df_parser
 from pandas import read_csv
 
+PATH = 'mbti_1.csv'
 class TestDFParser(unittest.TestCase):
     def test_parser_helpers(self):
-        path = '~/Documents/Code/mbti_1.csv'
+        path = PATH
         df = read_csv(path)
         
         #hyperlink remover check
@@ -20,7 +21,7 @@ class TestDFParser(unittest.TestCase):
         self.assertTrue(len(df)<len(e_df))
 
     def test_nlp_tc_df_parser(self):
-        path = '~/Documents/Code/mbti_1.csv'
+        path = PATH
         df = read_csv(path)
         test_df = nlp_tc_df_parser(path, None, 2, "|||")
         self.assertFalse(test_df.posts.str.contains(r'\bhttp*[a-zA-Z0-9]\b').any())
@@ -28,7 +29,7 @@ class TestDFParser(unittest.TestCase):
         self.assertTrue(len(nlp_tc_df_parser(path))==len(df))
 
 
-
+#class Test
 
 
 
