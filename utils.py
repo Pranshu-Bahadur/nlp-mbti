@@ -55,7 +55,7 @@ def explode(strategy : str, df)  -> DataFrame:
     df = df.rename(columns={k: df_col_names[i] for i,k in enumerate(df.columns.values)})
     return df
 
-# Retaining domain name: 
+# Retaining domain name: doesn't transform multiple links in a single post
 @parser.register
 def domain_retain(strategy : list, df) -> DataFrame:
     def transform_url(post):
