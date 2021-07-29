@@ -2,6 +2,7 @@ from pandas import read_csv, DataFrame, concat, Series
 from tld import is_tld
 from functools import singledispatch
 from functools import reduce
+import re
 def nlp_tc_df_parser(path : str, *args : list):
     """
     Given a path to an nlp text classification dataset (.csv), 
@@ -54,4 +55,16 @@ def explode(strategy : str, df)  -> DataFrame:
     df = df.rename(columns={k: df_col_names[i] for i,k in enumerate(df.columns.values)})
     return df
 
+# Retaining domain name: 
+@parser.register
+def domain_retain(strategy : list, df) -> DataFrame:
+    def transform_url(post):
+        url = re.search(r'\bhttp.*[a-zA-Z0-9]\s',post)
+        if url:                
+            regex = re.findall(r'^.*\.(.*)\.', post)
+            post = post.replace(url.group(0),regex[0]+" ")
+            print(post)
+        return post
 
+    df['posts'] = df['posts'].apply(lambda x: transform_url(x))
+    return df
