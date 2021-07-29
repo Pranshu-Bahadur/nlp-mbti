@@ -14,4 +14,4 @@ pip install torch pandas
 
 ### Preprocessing strategy:
 - [x] 50 posts per user, split by "|||" delimiter.
-- [ ] So 1st use TweetTokenizer.tokenize (to handle links) -> then join strings back and then use BertweetTokenizer : normalization=True, fast=False (Which will normalize tweets (add URL tokens) and use then bpe) | Padding according to max words after split.
+- [ ] BertweetTokenizer : normalization=True, fast=False (Which will normalize tweets (add URL tokens) and use then bpe) | Padding according to max words after split.
