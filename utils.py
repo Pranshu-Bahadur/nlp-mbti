@@ -60,10 +60,9 @@ def explode(strategy : str, df)  -> DataFrame:
 def domain_retain(strategy : list, df) -> DataFrame:
     def transform_url(post):
         url = re.search(r'\bhttp.*[a-zA-Z0-9]\s',post)
-        if url:                
+        if url:
             regex = re.findall(r'^.*\.(.*)\.', post)
             post = post.replace(url.group(0),regex[0]+" ")
-            print(post)
         return post
 
     df['posts'] = df['posts'].apply(lambda x: transform_url(x))

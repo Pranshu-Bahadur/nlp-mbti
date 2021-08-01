@@ -27,6 +27,11 @@ pip install torch pandas transformers tokenizers datasets numpy
 
 
 
+# Notes:
+---
+
+- Doing this repo in tf2 (never used before)
+
 
 
 
