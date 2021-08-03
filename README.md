@@ -22,16 +22,21 @@ pip install torch pandas transformers tokenizers datasets numpy
 ### Agent Description:
 ---
 
-- [ ] 
-- [ ] I'll need amd driver installed & ROCM(?)4.2, to run tests on local
+- [ ] Tokenizer
+- [ ] init model with hyperparams
+- [ ] train/eval loop
+- [ ] Run agent(train)
+- [ ] Save hyperparam config as logs
+
+
+- [ ] Custom Dataset
 
 
 
 # Notes:
 ---
 
-- Doing this repo in tf2 (never used before)
-
+- Learning RL hyperparameter search (Controller)
 
 
 

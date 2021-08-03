@@ -1,6 +1,7 @@
 import unittest
-from preprocess import _parser, nlp_tc_df_parser
+from preprocess import _parser, nlp_tc_df_parser, generate_dataset
 from pandas import read_csv
+from transformers import AutoTokenizer
 
 PATH = 'mbti_1.csv'
 class TestDFParser(unittest.TestCase):
@@ -24,16 +25,20 @@ class TestDFParser(unittest.TestCase):
         #d_df = _parser([], e_df)
         #self.assertTrue(len(d_df) == len(e_df))
 
-    def test_nlp_tc_df__parser(self):
+    def test_nlp_tc_df_parser(self):
         path = PATH
         df = read_csv(path)
-        test_df = nlp_tc_df__parser(path, None, 2, "|||")
+        test_df = nlp_tc_df_parser(path, ['bring me back pls.'], None, 2, "|||")
         self.assertFalse(test_df.posts.str.contains(r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?').any())
         self.assertTrue(len(df)<len(test_df))
-        self.assertTrue(len(nlp_tc_df__parser(path))==len(df))
+        self.assertTrue(len(nlp_tc_df_parser(path))==len(df))
 
 
-#class Test
+class TestGenDataset(unittest.TestCase):
+    def test_gen_dataset(self):
+        args = [[['bring me back pls.'], None, 2, "|||"],
+                {"tokenizer": AutoTokenizer.from_pretrained("vinai/bertweet-base"), "max_length" : 40, "truncation" : True}]
+        generate_dataset(PATH, args)
 
 
 

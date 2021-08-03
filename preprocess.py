@@ -2,9 +2,10 @@ from pandas import read_csv, DataFrame, concat, Series
 from functools import singledispatch, reduce
 from tqdm import tqdm
 from transformers import PreTrainedTokenizerBase
-import tensorflow.data.Dataset.from_tensor_slices as from_tensor_slices
+from tensorflow import data
+from tensorflow.data import Dataset
 import numpy as np
-
+import pandas as pd
 
 #======================================================================
 # 
@@ -12,13 +13,13 @@ import numpy as np
 
 
 
-def generate_dataset(*args) -> Dataset:
+def generate_dataset(path : str, configs : list) -> Dataset:
     """
     Given a dictionary of instructions perform dynamic dispatch to pre-process
     .csv as a dataframe based on given strategy args, encode DataFrame and 
     return tf.data.Dataset object.
     """
-    return reduce(lambda x: _generate_dataset_helper(**x), args)
+    return reduce(lambda x, y: _generate_dataset_helper(x, y), configs, path)
 
 
 
@@ -30,12 +31,12 @@ def _generate_dataset_helper(path : str, args : list) ->  DataFrame:
 def _tokenize(df : DataFrame, kwargs : dict) -> dict:
     tokenizer = kwargs.pop('tokenizer')
     encodings = tokenizer(list(df['posts']), **kwargs)
-    encodings['labels'] = df['labels']
+    encodings['labels'] = df['type'].tolist()
     return encodings
 
 @_generate_dataset_helper.register
 def _gen_tf_dataset(encodings : dict, kwargs=None) -> Dataset:
-    return from_tensor_slices(encodings)
+    return Dataset.from_tensor_slices(encodings)
 
 
 
@@ -74,9 +75,9 @@ def nlp_tc_df_parser(path : str, *args) -> DataFrame:
 
 @singledispatch
 def _parser(strategy, df) -> DataFrame:
-    str_labels = pd.unique(df.labels.values.tolist())
+    str_labels = pd.unique(df.type.values.tolist())
     labels_dict =  dict(zip(str_labels, list(range(len(str_labels)))))
-    df['labels'] = df['labels'].apply(lambda x: labels_dict[x])
+    df['type'] = df['type'].apply(lambda x: labels_dict[x])
     return df
 
 
@@ -99,8 +100,8 @@ def _explode(strategy : str, df)  -> DataFrame:
     df_col_names = df.columns.values.tolist()
     df = df.rename(columns={df_col_names[i]: generic_col_names[i] for i in range(2)})
     df = DataFrame(concat([Series(row['labels'], row['x'].split(strategy)) for _, row in tqdm(df.iterrows())])).reset_index()
-    generic_col_names.reverse()
-    df = df.rename(columns={k: generic_col_names[i] for i,k in enumerate(df.columns.values.tolist())})
+    df_col_names.reverse()
+    df = df.rename(columns={k: df_col_names[i] for i,k in enumerate(df.columns.values.tolist())})
     return df
 
   
