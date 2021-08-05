@@ -21,6 +21,15 @@ class TestDFParser(unittest.TestCase):
         e_df = _parser("|||", df)
         self.assertTrue(len(df)<len(e_df))
 
+        #label splitting check
+        ind_df = _parser(set(), e_df)
+        #self.assertTrue(len(e_df.columns < len(ind_df.columns)))
+        self.assertTrue('I' or 'E' in ind_df.IE)
+        self.assertTrue('N' or 'S' in ind_df.NS)
+        self.assertTrue('F' or 'T' in ind_df.FT)
+        self.assertTrue('P' or 'J' in ind_df.PJ)
+
+
         # TODO Domain check
         #d_df = _parser([], e_df)
         #self.assertTrue(len(d_df) == len(e_df))
@@ -36,7 +45,7 @@ class TestDFParser(unittest.TestCase):
 
 class TestGenDataset(unittest.TestCase):
     def test_gen_dataset(self):
-        args = [[['bring me back pls.'], None, 2, "|||"],
+        args = [[['bring me back pls.'], None, 2, "|||",set()],
                 {"tokenizer": AutoTokenizer.from_pretrained("vinai/bertweet-base"), "max_length" : 40, "truncation" : True}]
         generate_dataset(PATH, args)
 
