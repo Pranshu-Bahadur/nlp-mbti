@@ -11,8 +11,6 @@ import pandas as pd
 # 
 #======================================================================
 
-
-
 def generate_dataset(path : str, configs : list) -> Dataset:
     """
     Given a dictionary of instructions perform dynamic dispatch to pre-process
@@ -20,7 +18,6 @@ def generate_dataset(path : str, configs : list) -> Dataset:
     return tf.data.Dataset object.
     """
     return reduce(lambda x, y: _generate_dataset_helper(x, y), configs, path)
-
 
 
 @singledispatch
@@ -37,8 +34,6 @@ def _tokenize(df : DataFrame, kwargs : dict) -> dict:
 @_generate_dataset_helper.register
 def _gen_tf_dataset(encodings : dict, kwargs=None) -> Dataset:
     return Dataset.from_tensor_slices(encodings)
-
-
 
 
 
@@ -82,7 +77,7 @@ def _parser(strategy, df) -> DataFrame:
 
 
 @_parser.register
-def _hyper_link_cleaner(strategy : None, df)  -> DataFrame:
+def _hyper_link_cleaner(strategy : set, df)  -> DataFrame:
     df.posts = df.posts.str.replace(r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?', " ")
     return df
 
@@ -116,7 +111,7 @@ def _add_separate_cols(strategy: bool, df) -> DataFrame:
 
 
 """
-# Retaining domain name: doesn't transform multiple links in a single post
+Retaining domain name: doesn't transform multiple links in a single post
 @parser.register
 def domain_retain(strategy : list, df) -> DataFrame:
     def transform_url(post):
@@ -129,3 +124,5 @@ def domain_retain(strategy : list, df) -> DataFrame:
     df['posts'] = df['posts'].apply(lambda x: transform_url(x))
     return df
 """
+
+
