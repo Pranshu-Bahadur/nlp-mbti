@@ -17,17 +17,13 @@ class TestDFParser(unittest.TestCase):
         min_word_limit_df = _parser(18, no_links_df)
         self.assertTrue(len(df)>len(min_word_limit_df))
 
-        #.posts.losion check
+        #.posts explosion check
         e_df = _parser("|||", df)
         self.assertTrue(len(df)<len(e_df))
 
         #label splitting check
-        ind_df = _parser(set(), df)
+        ind_df = _parser(True, df)
         #self.assertTrue(len(e_df.columns < len(ind_df.columns)))
-        self.assertTrue('I' or 'E' in ind_df.IE)
-        self.assertTrue('N' or 'S' in ind_df.NS)
-        self.assertTrue('F' or 'T' in ind_df.FT)
-        self.assertTrue('P' or 'J' in ind_df.PJ)
         print(ind_df.head())
 
 

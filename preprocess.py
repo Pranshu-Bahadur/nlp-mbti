@@ -106,53 +106,10 @@ def _explode(strategy : str, df)  -> DataFrame:
     return df
 
 @_parser.register
-def _add_separate_cols(strategy: set, df) -> DataFrame:
-
-#     df['IE'] = df['mbti'] 
-#     df['NS'] = df['mbti']
-#     df['FT'] = df['mbti']
-#     df['PJ'] = df['mbti']
-
-# #Assigning individual labels 
-#     for i, label in enumerate(df.type):
-#         if 'I' in label:
-#             df.IE[i] = 'I'
-#         elif 'E' in label:
-#             df.IE[i] = 'E'
-            
-#         if 'N' in label:
-#             df.NS[i] = 'N'
-#         elif 'S' in label:
-#             df.NS[i] = 'S'
-            
-#         if 'F' in label:
-#             df.FT[i] = 'F'
-#         elif 'T' in label:
-#             df.FT[i] = 'T'
-
-#         if 'P' in label:
-#             df.PJ[i] = 'P'
-#         elif 'J' in label:
-#             df.PJ[i] = 'J'
-#     df.to_csv("test.csv")
-
-    if 'type' not in df.columns:
-        return df   
-    #storing the indexes manually and assigning labels since the string labels have been overwritten 
-    ie_list = [0, 2, 3, 6, 8, 9, 10, 11]
-    ns_list = [0,1,2,3,4,5,6,7]
-    ft_list = [0, 5, 6, 8, 7, 10, 13, 15]
-    pj_list = [1 ,2, 6, 7, 8, 9, 12, 13]
-
-    df['IE'] = df.apply(lambda row: 'I' if row.type in ie_list else 'E', axis=1)
-    df['NS'] = df.apply(lambda row: 'N' if row.type in ns_list else 'S', axis=1)
-    df['FT'] = df.apply(lambda row: 'F' if row.type in ft_list else 'T', axis=1)
-    df['PJ'] = df.apply(lambda row: 'P' if row.type in pj_list else 'J', axis=1)
-
-    print(df.head()) 
+def _add_separate_cols(strategy: bool, df) -> DataFrame:
+    df['type'] = df['type'].str.split('')
+    df['type'] = df['type'].apply(lambda x: list(map(lambda attr_type: 0 if attr_type in "INTJ" else 1, x[1:-1])))
     return df
-
-  
 
 
 
