@@ -22,12 +22,9 @@ class TestDFParser(unittest.TestCase):
         self.assertTrue(len(df)<len(e_df))
 
         #label splitting check
-        ind_df = _parser(set(), e_df)
-        #self.assertTrue(len(e_df.columns < len(ind_df.columns)))
-        self.assertTrue('I' or 'E' in ind_df.IE)
-        self.assertTrue('N' or 'S' in ind_df.NS)
-        self.assertTrue('F' or 'T' in ind_df.FT)
-        self.assertTrue('P' or 'J' in ind_df.PJ)
+        ind_df = _parser(set(), df)
+        self.assertTrue(len(ind_df)*4 == sum(ind_df.type_vector.str.len()))
+        self.assertTrue(ind_df['type_vector'].isnull().sum()==0)
 
 
         # TODO Domain check
