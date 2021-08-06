@@ -144,14 +144,12 @@ def _add_separate_cols(strategy: set, df) -> DataFrame:
     ft_list = [0, 5, 6, 8, 7, 10, 13, 15]
     pj_list = [1 ,2, 6, 7, 8, 9, 12, 13]
 
-#     print(df.head())
-
     df['IE'] = df.apply(lambda row: 'I' if row.type in ie_list else 'E', axis=1)
     df['NS'] = df.apply(lambda row: 'N' if row.type in ns_list else 'S', axis=1)
     df['FT'] = df.apply(lambda row: 'F' if row.type in ft_list else 'T', axis=1)
     df['PJ'] = df.apply(lambda row: 'P' if row.type in pj_list else 'J', axis=1)
 
-    
+    print(df.head()) 
     return df
 
   
