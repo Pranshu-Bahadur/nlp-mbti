@@ -75,9 +75,12 @@ def nlp_tc_df_parser(path : str, *args) -> DataFrame:
 
 @singledispatch
 def _parser(strategy, df) -> DataFrame:
-    str_labels = pd.unique(df.type.values.tolist())
-    labels_dict =  dict(zip(str_labels, list(range(len(str_labels)))))
-    df['type'] = df['type'].apply(lambda x: labels_dict[x])
+    
+    # Need to convert labels into numbers after vectorizing them
+    
+    # str_labels = pd.unique(df.type.values.tolist())
+    # labels_dict =  dict(zip(str_labels, list(range(len(str_labels)))))
+    # df['type'] = df['type'].apply(lambda x: labels_dict[x])
     return df
 
 
@@ -138,20 +141,17 @@ def _add_separate_cols(strategy: set, df) -> DataFrame:
 
     if 'type' not in df.columns:
         return df   
-    #storing the indexes manually and assigning labels since the string labels have been overwritten 
-    ie_list = [0, 2, 3, 6, 8, 9, 10, 11]
-    ns_list = [0,1,2,3,4,5,6,7]
-    ft_list = [0, 5, 6, 8, 7, 10, 13, 15]
-    pj_list = [1 ,2, 6, 7, 8, 9, 12, 13]
+    # 
+    df['IE'] = df.apply(lambda row: '1' if 'I' in row.type else '0', axis=1)
+    df['NS'] = df.apply(lambda row: '1' if 'N' in row.type else '0', axis=1)
+    df['FT'] = df.apply(lambda row: '1' if 'F' in row.type else '0', axis=1)
+    df['PJ'] = df.apply(lambda row: '1' if 'P' in row.type else '0', axis=1)
 
-#     print(df.head())
-
-    df['IE'] = df.apply(lambda row: 'I' if row.type in ie_list else 'E', axis=1)
-    df['NS'] = df.apply(lambda row: 'N' if row.type in ns_list else 'S', axis=1)
-    df['FT'] = df.apply(lambda row: 'F' if row.type in ft_list else 'T', axis=1)
-    df['PJ'] = df.apply(lambda row: 'P' if row.type in pj_list else 'J', axis=1)
-
-    
+    df['type_vector'] = list((df.IE+'.'+df.NS+'.'+df.FT+'.'+df.PJ).str.split('.'))
+    df = df.drop(['IE',"NS","FT","PJ"],axis=1)
+    str_labels = pd.unique(df.type.values.tolist())
+    labels_dict =  dict(zip(str_labels, list(range(len(str_labels)))))
+    df['type'] = df['type'].apply(lambda x: labels_dict[x])
     return df
 
   
