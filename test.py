@@ -2,6 +2,9 @@ import unittest
 from preprocess import _parser, nlp_tc_df_parser, generate_dataset
 from pandas import read_csv
 from transformers import AutoTokenizer
+from agent import init_agent, run
+import tensorflow as tf
+
 
 PATH = 'mbti_1.csv'
 class TestDFParser(unittest.TestCase):
@@ -39,12 +42,31 @@ class TestDFParser(unittest.TestCase):
         self.assertTrue(len(df)<len(test_df))
         self.assertTrue(len(nlp_tc_df_parser(path))==len(df))
 
-
+"""
 class TestGenDataset(unittest.TestCase):
     def test_gen_dataset(self):
-        args = [[['bring me back pls.'], None, 2, "|||",set()],
+        args = [[['', None, 2, "|||", True],
                 {"tokenizer": AutoTokenizer.from_pretrained("vinai/bertweet-base"), "max_length" : 40, "truncation" : True}]
         generate_dataset(PATH, args)
+"""
+
+class TestAgent(unittest.TestCase):
+    def test_run_agent(self):
+        ds_config = [[set(), "|||", 2, True], 
+            {"tokenizer": AutoTokenizer.from_pretrained("vinai/bertweet-base"),
+            "max_length" : 40,
+            "truncation" : True,
+            "padding" : "max_length"}]
+
+        agent_config = {"optimizer" : tf.keras.optimizers.Adam(learning_rate=176e-5),
+                        "loss" : tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                        "metrics" : tf.metrics.SparseCategoricalAccuracy()}
+      
+        agent = init_agent("vinai/bertweet-base", PATH, 4, dataset_config=ds_config, agent_config=agent_config)
+        gpus = tf.config.list_logical_devices('GPU')
+        strategy = tf.distribute.MirroredStrategy(gpus)
+        with strategy.scope():
+            run("train", agent, batch_size=128, epochs=10, verbose='auto', validation_split=0.3, workers=4, use_multiprocessing=True)
 
 
 

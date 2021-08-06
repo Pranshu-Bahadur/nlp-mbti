@@ -87,7 +87,6 @@ def _remove_below_word_limit(strategy : int, df)  -> DataFrame:
     df = df[df["total_words"]>strategy]
     df = df.drop(columns=["total_words"])
     return df
-
 # Splits input rows based on a given delimiter
 @_parser.register
 def _explode(strategy : str, df)  -> DataFrame:
