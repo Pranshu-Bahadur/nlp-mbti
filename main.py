@@ -75,7 +75,7 @@ if __name__ == "__main__":
     parse.add_argument("--train_batch_size", "-tb", help="Set batch size")
     parse.add_argument("--eval_batch_size", "-eb", help="Set batch size")
     parse.add_argument("--learning_rate", "-l", help="set initial learning rate")
-    parse.add_argument("--weight_decay", "-w", help="Set weight decay")
+    parse.add_argument("--weight_decay", "-wd", help="Set weight decay")
     parse.add_argument("--num_classes", "-n", help="set num classes")
     parse.add_argument("--epochs", "-f", help="Train for these many more epochs")
     parse.add_argument("--metrics", "-mt", help="Set metrics")
