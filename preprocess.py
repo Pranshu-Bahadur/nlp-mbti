@@ -2,10 +2,10 @@ from pandas import read_csv, DataFrame, concat, Series
 from functools import singledispatch, reduce
 from tqdm import tqdm
 from transformers import PreTrainedTokenizerBase
-from tensorflow import data
-from tensorflow.data import Dataset
 import numpy as np
 import pandas as pd
+from torch.utils.data import Dataset
+import torch
 
 #======================================================================
 # 
@@ -19,22 +19,34 @@ def generate_dataset(path : str, configs : list) -> Dataset:
     """
     return reduce(lambda x, y: _generate_dataset_helper(x, y), configs, path)
 
-
 @singledispatch
 def _generate_dataset_helper(path : str, args : list) ->  DataFrame:
     return nlp_tc_df_parser(path, *args)
 
+
 @_generate_dataset_helper.register
 def _tokenize(df : DataFrame, kwargs : dict) -> dict:
     tokenizer = kwargs.pop('tokenizer')
-    encodings = tokenizer(list(df['posts']), **kwargs)
-    encodings['labels'] = df['type'].tolist()
+    encodings = dict(tokenizer(list(df['posts'].values), **kwargs))
+    encodings['labels'] = list(df['type'].values)
     return encodings
 
-@_generate_dataset_helper.register
-def _gen_tf_dataset(encodings : dict, kwargs=None) -> Dataset:
-    return Dataset.from_tensor_slices(encodings)
+class EncodedDataset(Dataset):
+    def __init__(self, encodings):
+        self._labels = encodings.pop('labels')
+        self.encodings = encodings
 
+    def __getitem__(self, idx):
+        x = {k: torch.tensor(v[idx]) for k, v in self.encodings.items()}
+        x['labels'] = torch.tensor(self._labels[idx])
+        return x
+
+    def __len__(self):
+        return len(self._labels)
+
+@_generate_dataset_helper.register
+def _gen_tf_dataset(encodings : dict, kwargs : set) -> Dataset:
+    return EncodedDataset(encodings)
 
 
 #======================================================================
