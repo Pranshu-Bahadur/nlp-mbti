@@ -35,10 +35,10 @@ class MultilabelTrainer(Trainer):
 """
 
 
-def init_agent(name : str, path : str, num_labels : int, **kwargs) -> dict:
+def init_agent(agent_config, **kwargs) -> dict:
     agent = {}
-    agent['model'] = AutoModelForSequenceClassification.from_pretrained(name, num_labels=num_labels).cuda()
-    agent['train_dataset'],  agent['eval_dataset'], _ = _splitter(generate_dataset(path, kwargs['dataset_config']), 0.6)
+    agent['model'] = AutoModelForSequenceClassification.from_pretrained(agent_config['name'], num_labels=agent_config['labels']).cuda()
+    agent['train_dataset'],  agent['eval_dataset'], _ = _splitter(generate_dataset(agent_config['dataset_path'], agent_config['dataset_config']), 0.6)
     return agent
 
 def run(mode : str, agent : dict, **kwargs) -> dict:
