@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
         "seed": 420,
 
-        "output_directory": model_config["output_directory"],
+        "output_dir": model_config["output_directory"],
 
         "do_eval": True,
         
