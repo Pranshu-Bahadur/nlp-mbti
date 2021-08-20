@@ -40,7 +40,7 @@ def configure_model(args):
         "learning_rate": float(args.learning_rate),
         "weight_decay": float(args.weight_decay),
         "classes": int(args.num_classes),
-        "multilabel": args.multilabel,
+        "multilabel": True if args.multilabel else False,
         "epochs": int(args.epochs),
         "optimizer": create_optimizer(args.optimizer, float(args.learning_rate)),
         "loss": loss_criterion(args.loss),
