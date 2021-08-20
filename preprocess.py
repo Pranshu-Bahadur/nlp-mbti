@@ -36,7 +36,6 @@ class EncodedDataset(Dataset):
     def __init__(self, encodings):
         self._labels = encodings.pop('labels')
         self.encodings = encodings
-<<<<<<< HEAD
 
     def __getitem__(self, idx):
         x = {k: torch.tensor(v[idx]) for k, v in self.encodings.items()}
@@ -45,18 +44,6 @@ class EncodedDataset(Dataset):
 
     def __len__(self):
         return len(self._labels)
-
-=======
-
-    def __getitem__(self, idx):
-        x = {k: torch.tensor(v[idx]) for k, v in self.encodings.items()}
-        x['labels'] = torch.tensor(self._labels[idx])
-        return x
-
-    def __len__(self):
-        return len(self._labels)
-
->>>>>>> c27c6baff1969c1a12452103378a5b9e21bf5d93
 @_generate_dataset_helper.register
 def _gen_tf_dataset(encodings : dict, kwargs : set) -> Dataset:
     return EncodedDataset(encodings)
@@ -135,6 +122,24 @@ def _splitter(string : str, delimiter : str, num_words : int) -> list:
     strings = string.split(' ')
     return [' '.join(strings[j-num_words-1:j]) for j in range(num_words-1, len(strings), num_words)]
 
+
+
+
+"""
+Retaining domain name: doesn't transform multiple links in a single post
+@parser.register
+def domain_retain(strategy : list, df) -> DataFrame:
+    def transform_url(post):
+        url = re.search(r'\bhttp.*[a-zA-Z0-9]\s',post)
+        if url:
+            regex = re.findall(r'^.*\.(.*)\.', post)
+            post = post.replace(url.group(0),regex[0]+" ")
+
+        return post
+
+    df['posts'] = df['posts'].apply(lambda x: transform_url(x))
+    return df
+"""
 
 
 

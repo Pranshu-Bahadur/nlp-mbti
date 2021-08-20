@@ -44,7 +44,7 @@ class TestDFParser(unittest.TestCase):
         self.assertTrue(len(df)<len(test_df))
         self.assertTrue(len(nlp_tc_df_parser(path))==len(df))
 
-class TestGenDataset(unittest.TestCase):
+ class TestGenDataset(unittest.TestCase):
     def test_gen_dataset(self):
         args = [[['', None, 2, "|||", True],
                 {"tokenizer": AutoTokenizer.from_pretrained("distilbert-base-uncased"), "max_length" : 40, "truncation" : True}]
@@ -86,4 +86,4 @@ class TestAgent(unittest.TestCase):
 
 if __name__ == '__main__':
   unittest.main()
- 
+
