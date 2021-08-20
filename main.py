@@ -134,6 +134,6 @@ if __name__ == "__main__":
     agent_config = configure_agent(model_config)
 
     # Call the agent to initialize the model and run it
-    _agent = agent.init_agent(agent_config['model'], agent_config['dataset_path'], agent_config['num_classes'], agent_config['train_split'], agent_config)
+    _agent = agent.init_agent(agent_config['model'], agent_config['dataset_path'], agent_config['classes'], agent_config['train_split'], agent_config)
 
     agent.run("train", _agent, train_args=train_args)
