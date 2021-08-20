@@ -60,7 +60,8 @@ def configure_agent(config):
         "dataset_path": config["dataset_directory"],
         "labels": 4,
         "dataset_config": config["dataset_config"],
-        "train_split": config["train_split"]
+        "train_split": config["train_split"],
+        "classes": config['classes']
     }
     
     return agent_config
