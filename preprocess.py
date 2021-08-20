@@ -36,6 +36,7 @@ class EncodedDataset(Dataset):
     def __init__(self, encodings):
         self._labels = encodings.pop('labels')
         self.encodings = encodings
+<<<<<<< HEAD
 
     def __getitem__(self, idx):
         x = {k: torch.tensor(v[idx]) for k, v in self.encodings.items()}
@@ -45,6 +46,17 @@ class EncodedDataset(Dataset):
     def __len__(self):
         return len(self._labels)
 
+=======
+
+    def __getitem__(self, idx):
+        x = {k: torch.tensor(v[idx]) for k, v in self.encodings.items()}
+        x['labels'] = torch.tensor(self._labels[idx])
+        return x
+
+    def __len__(self):
+        return len(self._labels)
+
+>>>>>>> c27c6baff1969c1a12452103378a5b9e21bf5d93
 @_generate_dataset_helper.register
 def _gen_tf_dataset(encodings : dict, kwargs : set) -> Dataset:
     return EncodedDataset(encodings)
