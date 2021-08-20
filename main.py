@@ -39,6 +39,7 @@ def configure_model(args):
         "learning_rate": float(args.learning_rate),
         "weight_decay": float(args.weight_decay),
         "classes": int(args.num_classes),
+        "multilabel": args.multilabel,
         "epochs": int(args.epochs),
         "optimizer": create_optimizer(args.optimizer, float(args.learning_rate)),
         "loss": loss_criterion(args.loss),
@@ -49,7 +50,7 @@ def configure_model(args):
                             "truncation": True,
                             "padding": "max_length" }, set()],
         "metrics": create_metrics(args.metrics),
-        "output_directory": args.output_directory        
+        "output_directory": args.output_directory     
     }
     return model_config
 
@@ -81,6 +82,7 @@ if __name__ == "__main__":
     parse.add_argument("--learning_rate", "-l", help="set initial learning rate")
     parse.add_argument("--weight_decay", "-wd", help="Set weight decay")
     parse.add_argument("--num_classes", "-n", help="set num classes")
+    parse.add_argument("--multilabel", "-ml")
     parse.add_argument("--epochs", "-f", help="Train for these many more epochs")
     parse.add_argument("--metrics", "-mt", help="Set metrics")
     parse.add_argument("--optimizer", help="Choose an optimizer")
@@ -125,7 +127,9 @@ if __name__ == "__main__":
 
         "logging_strategy": "steps",
 
-        "logging_steps": 100
+        "logging_steps": 100,
+
+        "multilabel": model_config["multilabel"]
 
     }
     
