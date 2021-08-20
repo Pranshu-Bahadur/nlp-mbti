@@ -35,6 +35,7 @@ def configure_model(args):
         "dataset_directory": args.dataset_directory,
         "train_batch_size": int(args.train_batch_size),
         "eval_batch_size": int(args.eval_batch_size),
+        "train_split": float(args.train_split),
         "learning_rate": float(args.learning_rate),
         "weight_decay": float(args.weight_decay),
         "classes": int(args.num_classes),
@@ -58,7 +59,8 @@ def configure_agent(config):
         "model": config["model_name"],
         "dataset_path": config["dataset_directory"],
         "labels": 4,
-        "dataset_config": config["dataset_config"]
+        "dataset_config": config["dataset_config"],
+        "train_split": config["train_split"]
     }
     
     return agent_config
@@ -74,6 +76,7 @@ if __name__ == "__main__":
     parse.add_argument("--word_limit", "-w", help="Enter minimum words per post")
     parse.add_argument("--train_batch_size", "-tb", help="Set batch size")
     parse.add_argument("--eval_batch_size", "-eb", help="Set batch size")
+    parse.add_argument("--train_split", "-r", help="Set the train, test split ratio")
     parse.add_argument("--learning_rate", "-l", help="set initial learning rate")
     parse.add_argument("--weight_decay", "-wd", help="Set weight decay")
     parse.add_argument("--num_classes", "-n", help="set num classes")
@@ -131,6 +134,6 @@ if __name__ == "__main__":
     agent_config = configure_agent(model_config)
 
     # Call the agent to initialize the model and run it
-    _agent = agent.init_agent(agent_config)
+    _agent = agent.init_agent(agent_config['model'], agent_config['dataset_path'], agent_config['train_split'], agent_config)
 
     agent.run("train", _agent, train_args=train_args)
