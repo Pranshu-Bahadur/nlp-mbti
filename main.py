@@ -130,7 +130,7 @@ if __name__ == "__main__":
 
         "logging_strategy": "steps",
 
-        "logging_steps": 100
+        "logging_steps": 1000
 
     }
     
@@ -142,4 +142,4 @@ if __name__ == "__main__":
     # Call the agent to initialize the model and run it
     _agent = agent.init_agent(agent_config['model'], agent_config['dataset_path'], agent_config['classes'], agent_config['train_split'], dataset_config= agent_config['dataset_config'])
 
-    agent.run("train", _agent, multilabel=model_config['multilabel'])
+    agent.run("train", _agent, args=train_args, multilabel=model_config['multilabel'])
