@@ -2,6 +2,7 @@ import argparse
 import agent
 from transformers import AutoTokenizer, TrainingArguments
 import tensorflow as tf
+import torch
 
 
 def create_optimizer(name: str, learning_rate: float):
@@ -69,6 +70,8 @@ def configure_agent(config):
 
 if __name__ == "__main__":
     
+    torch.multiprocessing.set_sharing_strategy('file_system')
+
     parse = argparse.ArgumentParser()
 
     # Passing the command arguments
