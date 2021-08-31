@@ -45,6 +45,12 @@ class SinglelabelTrainer(Trainer):
 
 class MultilabelTrainer(Trainer):
     def __init__(self, **kwargs):
+        
+        self.loss_fct = kwargs.pop("loss")
+        weights=torch.tensor([0.75, 0.75, 0.5, 0.5]).float()
+        #print(weights)
+        self.loss_fct.weight = weights.cuda()#pos_weight=weights
+
         super().__init__(**kwargs)
         """
         loader = Loader(self.train_dataset, self.args.train_batch_size, shuffle=False, num_workers=4)
@@ -54,10 +60,8 @@ class MultilabelTrainer(Trainer):
         weights =  1 - weights
         weights[2:] = 0.5
         """
-        weights=torch.tensor([0.75, 0.75, 0.5, 0.5]).float()
-        #print(weights)
-        self.loss_fct = kwargs["loss"].weight=weights.cuda()#pos_weight=weights
 
+        
     def compute_loss(self, model, inputs, return_outputs=False):
         labels = inputs.pop("labels")
         outputs = model(**inputs)
