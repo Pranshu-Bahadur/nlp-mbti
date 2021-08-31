@@ -31,7 +31,7 @@ class SinglelabelTrainer(Trainer):
         #weights[2:] = 0.5
         #weights=torch.tensor([0.5, 0.5, 0.9, 0.9]).float()
         #print(weights)
-        self.loss_fct = kwargs["loss"] (weights=weights.cuda())#pos_weight=weights
+        self.loss_fct = kwargs["loss"].weights=weights.cuda()#pos_weight=weights
     """
     def compute_loss(self, model, inputs, return_outputs=False):
         labels = inputs.pop("labels")
