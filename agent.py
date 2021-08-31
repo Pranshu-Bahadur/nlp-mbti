@@ -56,7 +56,7 @@ class MultilabelTrainer(Trainer):
         """
         weights=torch.tensor([0.75, 0.75, 0.5, 0.5]).float()
         #print(weights)
-        self.loss_fct = kwargs["loss"] (weights=weights.cuda())#pos_weight=weights
+        self.loss_fct = kwargs["loss"].weight=weights.cuda()#pos_weight=weights
 
     def compute_loss(self, model, inputs, return_outputs=False):
         labels = inputs.pop("labels")
