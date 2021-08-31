@@ -152,4 +152,4 @@ if __name__ == "__main__":
     # Since we need the model to pass its parameters to create optimizer.
     model_config['optimizer'] = create_optimizer(args.optimizer, float(args.learning_rate), _agent)
 
-    agent.run("train", _agent, args=train_args, multilabel=model_config['multilabel'])
+    agent.run("train", _agent, args=train_args, multilabel=model_config['multilabel'], loss=model_config['loss'])
