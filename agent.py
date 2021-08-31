@@ -13,6 +13,7 @@ def init_agent(name : str, path : str, num_labels : int, train_split_factor : in
 
 def run(mode : str, agent : dict, **kwargs) -> dict:
     kwargs = {**agent, **kwargs}
+    print(kwargs)
     trainer = MultilabelTrainer(**kwargs, compute_metrics=_multilabel_accuracy) if kwargs.pop('multilabel') else SinglelabelTrainer(**kwargs, compute_metrics=_accuracy)
     trainer.train()
 
@@ -30,7 +31,7 @@ class SinglelabelTrainer(Trainer):
         #weights[2:] = 0.5
         #weights=torch.tensor([0.5, 0.5, 0.9, 0.9]).float()
         #print(weights)
-        self.loss_fct = nn.CrossEntropyLoss(weight=weights).cuda()#pos_weight=weights
+        self.loss_fct = kwargs["loss"] (weights=weights.cuda())#pos_weight=weights
     """
     def compute_loss(self, model, inputs, return_outputs=False):
         labels = inputs.pop("labels")
@@ -55,7 +56,7 @@ class MultilabelTrainer(Trainer):
         """
         weights=torch.tensor([0.75, 0.75, 0.5, 0.5]).float()
         #print(weights)
-        self.loss_fct = nn.BCEWithLogitsLoss(pos_weight=weights).cuda()#pos_weight=weights
+        self.loss_fct = kwargs["loss"] (weights=weights.cuda())#pos_weight=weights
 
     def compute_loss(self, model, inputs, return_outputs=False):
         labels = inputs.pop("labels")

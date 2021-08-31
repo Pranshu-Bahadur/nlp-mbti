@@ -18,8 +18,7 @@ def loss_criterion(name: str):
     loss = {
         "CCE": nn.CrossEntropyLoss().cuda(),
         "MML": nn.MultiMarginLoss().cuda(),
-        "MSE": nn.MSELoss().cuda(),
-        "BCE": nn.BCELoss().cuda()
+        "BCE": nn.BCEWithLogitsLoss().cuda()
     }
     return loss[name]
 
