@@ -93,7 +93,7 @@ if __name__ == "__main__":
     parse.add_argument("--num_classes", "-n", help="set num classes")
     parse.add_argument("--multilabel", "-ml")
     parse.add_argument("--epochs", "-f", help="Train for these many more epochs")
-    parse.add_argument("--metrics", "-mt", help="Set metrics")
+    #parse.add_argument("--metrics", "-mt", help="Set metrics")
     parse.add_argument("--optimizer", help="Choose an optimizer")
     parse.add_argument("--loss", help="Choose a loss criterion")
     parse.add_argument("--train", help="Set this model to train mode", action="store_true")
