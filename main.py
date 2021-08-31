@@ -69,7 +69,8 @@ def configure_agent(config):
         "labels": 4,
         "dataset_config": config["dataset_config"],
         "train_split": config["train_split"],
-        "classes": config['classes']
+        "classes": config['classes'],
+        "loss": config["loss"]
     }
     
     return agent_config
