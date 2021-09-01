@@ -1,5 +1,6 @@
 # MBTI Personality Classification based on users' twitter posts
 ------
+![steps](https://github.com/Pranshu-Bahadur/nlp-mbti/blob/RSJdoc/final.gif)
 <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
