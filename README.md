@@ -71,30 +71,47 @@ It is recommended for an intial user to run "python main.py --help" , for inform
 
 ```sh
 "-m" -> Model name.
+
 "-d" -> Dataset directory path.
-"-dl" -> next delimiter.
-"-w" -> minimum words per post.
-"-tb" -> training batch size.
-"-eb" -> eval batch size.
-"-r" -> test split ratio.
-"-l" -> learning rate.
-"-wd" -> weight decay.
-"-n" -> num classes.
-"-ml"-> multilabel classification.
+
+"-dl" -> Next delimiter.
+
+"-w" -> Minimum words per post.
+
+"-tb" -> Training batch size.
+
+"-eb" -> Eval batch size.
+
+"-r" -> Test split ratio.
+
+"-l" -> Learning rate.
+
+"-wd" -> Weight decay.
+
+"-n" -> Num classes.
+
+"-ml"-> Multilabel classification.
+
 "-f" -> Number of epochs.
-"-mt"-> metrics.
-"--optimizer" -> optimizer.
-"--loss" -> loss criterion.
+
+"-mt"-> Metrics.
+
+"--optimizer" -> Optimizer.
+
+"--loss" -> Loss criterion.
+
 "--train"->To train model.
- "-o"-> output directory .
- "--save_interval" 
+
+"-o"-> Output directory .
+
+"--save_interval" 
 ```
 # Example
 
 python main.py -m vinai/bertweet-base -d ./mbti_1.csv -dl "|||" -w 5 -tb 256 -eb 256 -r 0.75 -l 176e-06 -wd 1e-05 -n 16 -f 5 --optimizer ADAM --loss BCE --train -o ./ops --save_interval 2
 
 
-# FEATURES 
+# Features 
 
 - [x] (unit tested) utils.py : dataframe parser using reduce & singledispatch
 - [ ] agent.py : NLPAgent(kwargs) | Just build constructor & tokenizer based on user kwargs
