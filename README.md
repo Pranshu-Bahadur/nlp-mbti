@@ -113,7 +113,7 @@ python main.py -m vinai/bertweet-base -d ./mbti_1.csv -dl "|||" -w 5 -tb 256 -eb
 
 
 ! [Demo](https://user-images.githubusercontent.com/53692053/131637128-319661fb-acb8-4cb0-b3cc-1073084bb0f5.gif)
-
+! [Demo](https://user-images.githubusercontent.com/53692053/131637128-319661fb-acb8-4cb0-b3cc-1073084bb0f5.gif)
 
 
 ## Features 
