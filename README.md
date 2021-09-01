@@ -18,11 +18,6 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
 
@@ -63,7 +58,9 @@ This is  list of python packages you need to use the software and how to install
    ```
 2. Install pip packages mentioned above
 
-# Command line Arguments
+# Usage
+
+## Command line Arguments
 
 Here the user has to input the required command line arguments to run the model.
 
@@ -106,13 +103,13 @@ It is recommended for an intial user to run "python main.py --help" , for inform
 
 "--save_interval" 
 ```
-# Example
+## Example
 
 python main.py -m vinai/bertweet-base -d ./mbti_1.csv -dl "|||" -w 5 -tb 256 -eb 256 -r 0.75 -l 176e-06 -wd 1e-05 -n 16 -f 5 --optimizer ADAM --loss BCE --train -o ./ops --save_interval 2
 
 
 
-! [Demo](https://user-images.githubusercontent.com/53692053/131637128-319661fb-acb8-4cb0-b3cc-1073084bb0f5.gif)
+! [Demo](https://user-images.githubusercontent.com/53692053/131635349-39e049c7-c069-429f-b383-5965ab8d6c88.mp4)
 
 
 ## Features 
