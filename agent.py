@@ -43,8 +43,15 @@ class SinglelabelTrainer(Trainer):
 
 
 
+
 class MultilabelTrainer(Trainer):
     def __init__(self, **kwargs):
+
+        self.loss_fct = kwargs.pop("loss")
+        weights=torch.tensor([0.75, 0.75, 0.5, 0.5]).float()
+        #print(weights)
+        self.loss_fct.weight = weights.cuda()#pos_weight=weights
+
         super().__init__(**kwargs)
         """
         loader = Loader(self.train_dataset, self.args.train_batch_size, shuffle=False, num_workers=4)
@@ -54,9 +61,7 @@ class MultilabelTrainer(Trainer):
         weights =  1 - weights
         weights[2:] = 0.5
         """
-        weights=torch.tensor([0.75, 0.75, 0.5, 0.5]).float()
-        #print(weights)
-        self.loss_fct = kwargs["loss"].weight=weights.cuda()#pos_weight=weights
+
 
     def compute_loss(self, model, inputs, return_outputs=False):
         labels = inputs.pop("labels")
@@ -68,6 +73,7 @@ class MultilabelTrainer(Trainer):
     def create_optimizer(self):
         self.optimizer = torch.optim.AdamW(self.model.parameters(), 1e-5, betas=(0.999, 0.9), weight_decay=1e5)
         return self.optimizer
+
 
 
 def _splitter(dataset, *args):
@@ -86,9 +92,12 @@ def _multilabel_accuracy(outputs : EvalPrediction):
     h = torch.where(h >= 0.5, 1, 0)
     y_pred = h.long().cpu().detach().numpy()#np.vectorize(f)(h.unsqueeze(-1).cpu().detach().numpy())
     for i in range(y_true.shape[0]):
-        temp += sum(np.logical_and(y_true[i], y_pred[i])) / sum(np.logical_or(y_true[i], y_pred[i]))
-    print(y_true.shape)
-    return {"accuracy" : temp/(y_true.shape[0])}
+        temp += sum(np.logical_xor(y_true[i], y_pred[i])) #/ sum(np.logical_or(y_true[i], y_pred[i]))
+    print("-------Predicted--------------")
+    print(y_pred)
+    print("--------True------------------")
+    print(y_true)
+    return {"accuracy" : temp/256}
 
 def _accuracy(outputs : EvalPrediction):
     y_pred, y_true = outputs.predictions, outputs.label_ids
