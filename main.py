@@ -150,6 +150,6 @@ if __name__ == "__main__":
     _agent = agent.init_agent(agent_config['model'], agent_config['dataset_path'], agent_config['classes'], agent_config['train_split'], dataset_config= agent_config['dataset_config'])
 
     # Since we need the model to pass its parameters to create optimizer.
-    model_config['optimizer'] = create_optimizer(args.optimizer, float(args.learning_rate), _agent)
+    #model_config['optimizer'] = create_optimizer(args.optimizer, float(args.learning_rate), _agent)
 
-    agent.run("train", _agent, args=train_args, multilabel=model_config['multilabel'], loss=model_config['loss'])
+    agent.run("train", _agent, args=train_args, multilabel=True, loss=agent_config["loss"])
