@@ -106,7 +106,7 @@ It is recommended for an intial user to run "python main.py --help" , for inform
 ```
 ## Example
 
-python main.py -m vinai/bertweet-base -d ./mbti_1.csv -dl "|||" -w 5 -tb 256 -eb 256 -r 0.75 -l 176e-06 -wd 1e-05 -n 16 -f 5 --optimizer ADAM --loss BCE --train -o ./ops --save_interval 2
+python main.py -m vinai/bertweet-base -d ./mbti_1.csv -dl "|||" -w 5 -tb 256 -eb 256 -r 0.75 -l 176e-06 -wd 1e-05 -n 4 -f 5 --optimizer ADAM --loss BCE --train -o ./ops --save_interval 2
 
 
 
