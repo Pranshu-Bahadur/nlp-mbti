@@ -59,7 +59,6 @@ def nlp_tc_df_parser(path : str, *args) -> DataFrame:
     Given a path to an nlp text classification dataset (.csv),
     instantiate an instance of a DataFrame object and if needed perform
     cleaning procedures on it according to given kwargs.
-
     Parameters
     ----------
     path : str
@@ -136,10 +135,7 @@ def domain_retain(strategy : list, df) -> DataFrame:
             post = post.replace(url.group(0),regex[0]+" ")
 
         return post
-
     df['posts'] = df['posts'].apply(lambda x: transform_url(x))
     return df
 """
-
-
 

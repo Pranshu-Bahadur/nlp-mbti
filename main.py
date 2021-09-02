@@ -1,34 +1,40 @@
 import argparse
+from torch import nn
 import agent
 from transformers import AutoTokenizer, TrainingArguments
-import tensorflow as tf
+#import tensorflow as tf
 import torch
 
 
-def create_optimizer(name: str, learning_rate: float):
+def create_optimizer(name: str, learning_rate: float, agent):
     optimizer = {
-        "Adam": tf.keras.optimizers.Adam(learning_rate=learning_rate),
-        "SGD": tf.keras.optimizers.SGD(learning_rate=learning_rate)
+        "ADAM": torch.optim.Adam(agent['model'].parameters(), learning_rate, betas=(0.9, 0.999), eps=1e-8),
+        "SGD":  torch.optim.SGD(agent['model'].parameters(), learning_rate, weight_decay=1e-5, momentum=0.9, nesterov=True),
+        "ADAMW": torch.optim.AdamW(agent['model'].parameters(), lr=learning_rate,betas=(0.9, 0.999), weight_decay=1e-5, eps=1e-8, amsgrad=True)
     }
     return optimizer[name]
 
 def loss_criterion(name: str):
     loss = {
-        "SCE": tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True, name='train_loss'),
-        "CCE": tf.keras.losses.CategoricalCrossentropy(from_logits=True, name="train_loss"),
-        "BCE": tf.keras.losses.BinaryCrossentropy(from_logits=True, name='train_loss')
+        "CCE": nn.CrossEntropyLoss().cuda(),
+        "MML": nn.MultiMarginLoss().cuda(),
+        "BCE": nn.BCEWithLogitsLoss().cuda()
     }
     return loss[name]
 
-def create_metrics(name: str):
+'''def create_metrics(name: str):
     metrics = {
+        "CCE": nn.CrossEntropyLoss().cuda(),
+        "MML": nn.MultiMarginLoss().cuda(),
+        "MSE": nn.MSELoss().cuda(),
+        "BCE": nn.BCELoss().cuda(),
         "SCA": tf.metrics.SparseCategoricalAccuracy(name="train_accuracy"),
         "BA": tf.metrics.BinaryAccuracy(name="train_accuracy"),
         "CA": tf.metrics.CategoricalAccuracy(name="train_accuracy"),
         "STK": tf.metrics.SparseTopKCategoricalAccuracy(name="train_accuracy"),
         "TKC": tf.metrics.TopKCategoricalAccuracy(name="train_accuracy")
     }
-    return metrics[name]
+    return metrics[name]'''
 
 def configure_model(args):
     model_config = {
@@ -42,7 +48,7 @@ def configure_model(args):
         "classes": int(args.num_classes),
         "multilabel": True if args.multilabel else False,
         "epochs": int(args.epochs),
-        "optimizer": create_optimizer(args.optimizer, float(args.learning_rate)),
+        #"optimizer": create_optimizer(args.optimizer, float(args.learning_rate)),
         "loss": loss_criterion(args.loss),
         "train": True if args.train else False,
         "dataset_config": [ [int(args.word_limit),args.delimiter,True], {
@@ -50,7 +56,7 @@ def configure_model(args):
                             "max_length": 40,
                             "truncation": True,
                             "padding": "max_length" }, set()],
-        "metrics": create_metrics(args.metrics),
+        #"metrics": create_metrics(args.metrics),
         "output_directory": args.output_directory     
     }
     return model_config
@@ -63,7 +69,8 @@ def configure_agent(config):
         "labels": 4,
         "dataset_config": config["dataset_config"],
         "train_split": config["train_split"],
-        "classes": config['classes']
+        "classes": config['classes'],
+        "loss": config["loss"]
     }
     
     return agent_config
@@ -74,7 +81,7 @@ if __name__ == "__main__":
 
     parse = argparse.ArgumentParser()
 
-    # Passing the command arguments
+    # Passing the command arguments.
     parse.add_argument("--model_name", "-m", help="Pick a model name")
     parse.add_argument("--dataset_directory", "-d", help="Set dataset directory path")
     parse.add_argument("--delimiter", "-dl", help="Enter a delimiter")
@@ -87,7 +94,7 @@ if __name__ == "__main__":
     parse.add_argument("--num_classes", "-n", help="set num classes")
     parse.add_argument("--multilabel", "-ml")
     parse.add_argument("--epochs", "-f", help="Train for these many more epochs")
-    parse.add_argument("--metrics", "-mt", help="Set metrics")
+    #parse.add_argument("--metrics", "-mt", help="Set metrics")
     parse.add_argument("--optimizer", help="Choose an optimizer")
     parse.add_argument("--loss", help="Choose a loss criterion")
     parse.add_argument("--train", help="Set this model to train mode", action="store_true")
@@ -95,11 +102,11 @@ if __name__ == "__main__":
     parse.add_argument("--output_directory", "-o", help="Enter the path of directory to save the output")
     parse.add_argument("--save_interval", help="# of epochs to save checkpoints at.")
 
-    # Retrieving the model configuration from the passed arguments
+    # Retrieving the model configuration from the passed arguments.
     args = parse.parse_args()
     model_config = configure_model(args)
 
-    # Retrieve the training arguments
+    # Retrieve the training arguments.
     train_args = {
 
         "do_train": model_config["train"],
@@ -136,10 +143,13 @@ if __name__ == "__main__":
     
     train_args = TrainingArguments(**train_args)
 
-    # Retrieve agent configuration
+    # Retrieve agent configuration.
     agent_config = configure_agent(model_config)
 
-    # Call the agent to initialize the model and run it
+    # Call the agent to initialize the model and run it.
     _agent = agent.init_agent(agent_config['model'], agent_config['dataset_path'], agent_config['classes'], agent_config['train_split'], dataset_config= agent_config['dataset_config'])
 
-    agent.run("train", _agent, args=train_args, multilabel=model_config['multilabel'])
+    # Since we need the model to pass its parameters to create optimizer.
+    #model_config['optimizer'] = create_optimizer(args.optimizer, float(args.learning_rate), _agent)
+
+    agent.run("train", _agent, args=train_args, multilabel=True, loss=agent_config["loss"])
