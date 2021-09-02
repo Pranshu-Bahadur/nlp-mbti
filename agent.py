@@ -103,4 +103,3 @@ def _accuracy(outputs : EvalPrediction):
     y_pred, y_true = outputs.predictions, outputs.label_ids
     accuracy = np.sum(np.argmax(y_pred, axis=-1) == y_true) / y_true.shape[0]
     return {"accuracy" : accuracy}
-
