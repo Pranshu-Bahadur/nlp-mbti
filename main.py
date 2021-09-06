@@ -128,6 +128,8 @@ if __name__ == "__main__":
         "output_dir": model_config["output_directory"],
 
         "do_eval": True,
+
+        "do_predict": True,
         
         "dataloader_num_workers": 4,
 
