@@ -14,8 +14,8 @@ def init_agent(name : str, path : str, num_labels : int, train_split_factor : in
 
 def run(mode : str, agent : dict, **kwargs) -> dict:
     kwargs = {**agent, **kwargs}
-    print(kwargs)
-    trainer = MultilabelTrainer(**kwargs, compute_metrics=_multilabel_accuracy) if kwargs.pop('multilabel') else SinglelabelTrainer(**kwargs, compute_metrics=_accuracy)
+    # print(kwargs)
+    trainer = MultilabelTrainer(**kwargs, compute_metrics=_multilabel_accuracy) # if kwargs.pop('multilabel') else SinglelabelTrainer(**kwargs, compute_metrics=_accuracy)
     trainer.train()
 
 #TODO add the following methods to utils
