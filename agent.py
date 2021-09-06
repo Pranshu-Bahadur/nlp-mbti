@@ -16,7 +16,7 @@ def run(mode : str, agent : dict, **kwargs) -> dict:
     kwargs = {**agent, **kwargs}
     print(kwargs)
     print(kwargs.pop("multilabel"))
-    trainer = MultilabelTrainer(**kwargs, compute_metrics=_multilabel_accuracy) # if kwargs.pop('multilabel') else SinglelabelTrainer(**kwargs, compute_metrics=_accuracy)
+    trainer = MultilabelTrainer(**kwargs) # if kwargs.pop('multilabel') else SinglelabelTrainer(**kwargs, compute_metrics=_accuracy)
     trainer.train()
 
 #TODO add the following methods to utils
