@@ -5,6 +5,7 @@ from torch import nn
 import torch
 from torch.utils.data import WeightedRandomSampler
 from torch.utils.data import DataLoader as Loader
+from sklearn.metrics import f1_score
 
 def init_agent(name : str, path : str, num_labels : int, train_split_factor : int, **kwargs) -> dict:
     agent = {"model": AutoModelForSequenceClassification.from_pretrained(name, num_labels=num_labels).cuda()}
@@ -91,6 +92,13 @@ def _multilabel_accuracy(outputs : EvalPrediction):
     #h[:,:-2] = torch.where(h[:,:-2] >= 0.6, 1, 0)
     h = torch.where(h >= 0.5, 1, 0)
     y_pred = h.long().cpu().detach().numpy()#np.vectorize(f)(h.unsqueeze(-1).cpu().detach().numpy())
+    f_score = f1_score(y_true=y_true, y_pred=y_pred, average="weighted")
+    print("Y_true type:",end=" ")
+    print(type(y_true))
+    print("Y_pred type:",end=" ")
+    print(type(y_pred))
+
+    print("F1-score:",f_score)
     for i in range(y_true.shape[0]):
         temp += sum(np.logical_xor(y_true[i], y_pred[i])) #/ sum(np.logical_or(y_true[i], y_pred[i]))
     print("-------Predicted--------------")
