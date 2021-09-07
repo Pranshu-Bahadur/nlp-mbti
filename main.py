@@ -139,7 +139,7 @@ if __name__ == "__main__":
 
         "logging_strategy": "steps",
 
-        "logging_steps": 1000
+        "logging_steps": 800
 
     }
     
