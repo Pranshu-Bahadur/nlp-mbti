@@ -93,7 +93,7 @@ def _multilabel_accuracy(outputs : EvalPrediction):
     #h[:,:-2] = torch.where(h[:,:-2] >= 0.6, 1, 0)
     h = torch.where(h >= 0.5, 1, 0)
     y_pred = h.long().cpu().detach().numpy()#np.vectorize(f)(h.unsqueeze(-1).cpu().detach().numpy())
-    f_score = f1_score(y_true=y_true, y_pred=y_pred, average="weighted")
+    f_score = f1_score(y_true=y_true, y_pred=y_pred, average="macro")
     print("Y_true type:",end=" ")
     print(type(y_true))
     print("Y_pred type:",end=" ")
