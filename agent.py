@@ -100,8 +100,8 @@ def _multilabel_accuracy(outputs : EvalPrediction):
     print(type(y_pred))
 
     print("F1-score:",f_score)
-    for i in range(y_true.shape[0]):
-        temp += sum(np.logical_xor(y_true[i], y_pred[i])) #/ sum(np.logical_or(y_true[i], y_pred[i]))
+    # for i in range(y_true.shape[0]):
+    #     temp += sum(np.logical_xor(y_true[i], y_pred[i])) #/ sum(np.logical_or(y_true[i], y_pred[i]))
     print("-------Predicted--------------")
     print(y_pred)
     print("--------True------------------")
