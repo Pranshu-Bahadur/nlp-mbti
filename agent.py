@@ -104,10 +104,10 @@ def _multilabel_accuracy(outputs : EvalPrediction):
         t_neg = t_neg + tn
         f_pos = f_pos + fp
         f_neg = f_neg + fn
-    print("TRUE POSTIVE-----------", tp)
-    print("TRUE NEGATIVE----------", tn)
-    print("FALSE POSTIVE----------", fp)
-    print("FALSE NEGATIVE----------", fn)
+    print("TRUE POSTIVE-----------", t_pos)
+    print("TRUE NEGATIVE----------", t_neg)
+    print("FALSE POSTIVE----------", f_pos)
+    print("FALSE NEGATIVE----------", f_neg)
 
 
     f_score = f1_score(y_true=y_true, y_pred=y_pred, average="macro")
