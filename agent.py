@@ -6,6 +6,8 @@ import torch
 from torch.utils.data import WeightedRandomSampler
 from torch.utils.data import DataLoader as Loader
 from sklearn.metrics import f1_score
+from sklearn.metrics import confusion_matrix
+import itertools
 
 def init_agent(name : str, path : str, num_labels : int, train_split_factor : int, **kwargs) -> dict:
     agent = {"model": AutoModelForSequenceClassification.from_pretrained(name, num_labels=num_labels).cuda()}
@@ -31,7 +33,7 @@ class SinglelabelTrainer(Trainer):
         weights /= weights.sum().item()
         weights =  1 - weights
         #weights[2:] = 0.5
-        #weights=torch.tensor([0.5, 0.5, 0.9, 0.9]).float()
+        weights=torch.tensor([0.5, 0.5, 0.9, 0.9]).float()
         #print(weights)
         self.loss_fct = kwargs["loss"].weights=weights.cuda()#pos_weight=weights
     """
@@ -93,6 +95,21 @@ def _multilabel_accuracy(outputs : EvalPrediction):
     #h[:,:-2] = torch.where(h[:,:-2] >= 0.6, 1, 0)
     h = torch.where(h >= 0.5, 1, 0)
     y_pred = h.long().cpu().detach().numpy()#np.vectorize(f)(h.unsqueeze(-1).cpu().detach().numpy())
+
+    ##Confusion Matrix 
+    t_pos, t_neg, f_pos, f_neg = 0, 0 ,0, 0
+    for true, pred in zip(y_true, y_pred):
+        tp, fn, fp, tn = confusion_matrix(true,pred,labels=[1,0]).reshape(-1)
+        t_pos = t_pos + tp
+        t_neg = t_neg + tn
+        f_pos = f_pos + fp
+        f_neg = f_neg + fn
+    print("TRUE POSTIVE-----------", tp)
+    print("TRUE NEGATIVE----------", tn)
+    print("FALSE POSTIVE----------", fp)
+    print("FALSE NEGATIVE----------", fn)
+
+
     f_score = f1_score(y_true=y_true, y_pred=y_pred, average="macro")
     print("Y_true type:",end=" ")
     print(type(y_true))
