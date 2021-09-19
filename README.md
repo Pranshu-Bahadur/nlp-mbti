@@ -36,30 +36,15 @@
 
 To get a local copy up and running follow these simple steps.
 
-### Prerequisites
-
-This is  list of python packages you need to use the software and how to install them.
-
+### Dependencies
+------
 
 * pip
   ```sh
-   pip install torch 
-   pip install pandas 
-   pip install transformers 
-   pip install tokenizers 
-   pip install datasets 
-   pip install numpy
+   pip install torch pandas transformers tokenizers datasets numpy
   ```
-
-### Installation
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/Pranshu-Bahadur/nlp-mbti.git
-   ```
-2. Install pip packages mentioned above
-
 # Usage
+---
 
 ## Command line Arguments
 
@@ -104,23 +89,9 @@ It is recommended for an intial user to run "python main.py --help" , for inform
 
 "--save_interval" 
 ```
-## Example
+## Example Cli Command
+------
 
+```sh
 python main.py -m vinai/bertweet-base -d ./mbti_1.csv -dl "|||" -w 5 -tb 256 -eb 256 -r 0.75 -l 176e-06 -wd 1e-05 -n 4 -f 5 --optimizer ADAM --loss BCE --train -o ./ops --save_interval 2
-
-
-
-! [Demo](https://user-images.githubusercontent.com/53692053/131635349-39e049c7-c069-429f-b383-5965ab8d6c88.mp4)
-
-
-## Features 
-
-- [x] (unit tested) utils.py : dataframe parser using reduce & singledispatch
-- [ ] agent.py : NLPAgent(kwargs) | Just build constructor & tokenizer based on user kwargs
-
-
-
-
-## Preprocessing strategy:
-- [x] 50 posts per user, split by  "|||" delimiter.
-- [ ] BertweetTokenizer : normalization=True, fast=False (Which will normalize tweets (add URL tokens) and use then bpe) | Padding according to max words after split.
+```
