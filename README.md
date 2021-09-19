@@ -1,4 +1,4 @@
-# MBTI Personality Classification based on users' twitter posts
+# MBTI Personality Classification based on users' social media posts
 ------
 ![steps](https://github.com/Pranshu-Bahadur/nlp-mbti/blob/RSJdoc/final.gif)
 <!-- TABLE OF CONTENTS -->
